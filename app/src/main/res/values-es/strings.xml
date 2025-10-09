@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">DaleBoca</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="register">Registrarse</string>
+    <string name="description">Descripción</string>
+    <string name="location">Ubicación</string>
+    <string name="select_image">Seleccionar imagen</string>
+    <string name="add_moment">Añadir momento</string>
+    <string name="edit_moment">Editar momento</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="delete_moment">Eliminar momento</string>
+    <string name="search_by_tag">Buscar por etiqueta</string>
+    <string name="download_complete">Descarga completa</string>
+    <string name="download_complete_text">%1$s se ha descargado.</string>
+    <string name="add_moment_fab">Añadir momento</string>
+    <string name="settings">Ajustes</string>
+    <string name="language">Idioma</string>
+    <string name="select_language">Seleccionar idioma</string>
+    <string name="registration">Registro</string>
+</resources>
