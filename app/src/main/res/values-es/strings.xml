@@ -44,6 +44,7 @@
     <string name="nav_home">Inicio</string>
     <string name="nav_chat">Chat</string>
     <string name="nav_map">Mapa</string>
+    <string name="nav_profile">Perfil</string>
     <string name="chat_title">Chat comunitario</string>
     <string name="comment_section_title">Comentarios</string>
     <string name="add_comment_placeholder">Tu comentario</string>

@@ -2,14 +2,19 @@
 
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.buenosaires.connect.core.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _selectedLanguage = MutableStateFlow(
@@ -20,6 +25,17 @@ class SettingsViewModel @Inject constructor(
     fun updateLanguage(languageCode: String) {
         _selectedLanguage.value = languageCode
         sharedPreferences.edit().putString(LANGUAGE_KEY, languageCode).apply()
+    }
+
+    fun logout(navController: NavController) {
+        viewModelScope.launch {
+            userRepository.logout()
+            navController.navigate("registration") {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+        }
     }
 
     companion object {

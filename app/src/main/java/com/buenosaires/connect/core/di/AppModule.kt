@@ -7,6 +7,7 @@ import androidx.room.Room
 import com.buenosaires.connect.core.data.CommentDao
 import com.buenosaires.connect.core.data.MomentDao
 import com.buenosaires.connect.core.data.UserDao
+import com.buenosaires.connect.core.data.UserRepository
 import com.buenosaires.connect.core.database.AppDatabase
 import com.buenosaires.connect.core.database.MIGRATION_1_2
 import com.buenosaires.connect.core.database.MIGRATION_2_3
@@ -47,4 +48,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCommentDao(db: AppDatabase): CommentDao = db.commentDao()
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(userDao: UserDao): UserRepository = UserRepository(userDao)
 }

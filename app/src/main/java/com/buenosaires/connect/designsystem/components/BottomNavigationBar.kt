@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -26,7 +27,8 @@ private data class BottomNavDestination(
 private val destinations = listOf(
     BottomNavDestination("home", R.string.nav_home, Icons.Filled.Home),
     BottomNavDestination("chat", R.string.nav_chat, Icons.AutoMirrored.Filled.Chat),
-    BottomNavDestination("map", R.string.nav_map, Icons.Filled.Map)
+    BottomNavDestination("map", R.string.nav_map, Icons.Filled.Map),
+    BottomNavDestination("profile", R.string.nav_profile, Icons.Filled.AccountCircle) // Added Profile
 )
 
 @Composable
@@ -43,6 +45,7 @@ fun BuenosAiresBottomBar(navController: NavController) {
                     currentRoute.startsWith("edit_moment")
                 "chat" -> currentRoute.startsWith("chat")
                 "map" -> currentRoute.startsWith("map")
+                "profile" -> currentRoute.startsWith("profile") // Added Profile selection logic
                 else -> currentRoute == destination.route
             }
             NavigationBarItem(
@@ -68,4 +71,3 @@ fun BuenosAiresBottomBar(navController: NavController) {
         }
     }
 }
-

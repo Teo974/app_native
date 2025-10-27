@@ -101,8 +101,10 @@ fun SettingsScreen(
             Button(onClick = { navController.popBackStack() }) {
                 Text(stringResource(id = R.string.back))
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { viewModel.logout(navController) }) { // Added Logout Button
+                Text(stringResource(id = R.string.logout))
+            }
         }
     }
 }
-
-

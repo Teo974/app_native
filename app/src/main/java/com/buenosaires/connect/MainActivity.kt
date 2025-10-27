@@ -31,6 +31,7 @@ import com.buenosaires.connect.features.map.presentation.MapScreen
 import com.buenosaires.connect.features.onboarding.presentation.RegistrationScreen
 import com.buenosaires.connect.features.root.presentation.viewmodel.MainViewModel
 import com.buenosaires.connect.features.settings.presentation.SettingsScreen
+import com.buenosaires.connect.features.profile.presentation.ProfileScreen // Added ProfileScreen import
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -101,6 +102,9 @@ fun AppNavigation() {
             composable("settings") {
                 SettingsScreen(navController = navController)
             }
+            composable("profile") { // Added ProfileScreen composable
+                ProfileScreen(navController = navController)
+            }
         }
     } else {
         Box(
@@ -111,5 +115,3 @@ fun AppNavigation() {
         }
     }
 }
-
-
