@@ -45,6 +45,7 @@ android {
     }
 }
 dependencies {
+    implementation("com.google.android.gms:play-services-auth:21.1.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -63,7 +64,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore.ktx)
-    
+    implementation(libs.google.firebase.auth)
+
     ksp(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

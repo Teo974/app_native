@@ -1,5 +1,7 @@
 package com.buenosaires.connect.features.onboarding.presentation
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -32,10 +36,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -44,11 +51,15 @@ import androidx.navigation.NavController
 import com.buenosaires.connect.R
 import com.buenosaires.connect.features.onboarding.presentation.viewmodel.RegistrationViewModel
 import com.buenosaires.connect.features.onboarding.presentation.viewmodel.RegistrationViewModel.RegistrationError
+import com.buenosaires.connect.utils.GoogleAuth
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
-    navController: NavController, // Added navController parameter
+    navController: NavController, 
     onSignUpSuccess: () -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
@@ -59,6 +70,28 @@ fun SignUpScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val registrationCompleted by viewModel.registrationCompleted.collectAsState()
     val error by viewModel.error.collectAsState()
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            coroutineScope.launch {
+                val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    val idToken = account.idToken
+                    if (idToken != null) {
+                        val credential = GoogleAuthProvider.getCredential(idToken, null)
+                        viewModel.signUpWithGoogle(credential)
+                    }
+                } catch (e: ApiException) {
+                    // Handle sign-in error
+                }
+            }
+        }
+    )
 
     LaunchedEffect(registrationCompleted) {
         if (registrationCompleted) {
@@ -72,7 +105,7 @@ fun SignUpScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(id = R.string.registration), color = Color.Black) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) { // Implemented back navigation
+                    IconButton(onClick = { navController.popBackStack() }) { 
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.back),
@@ -139,6 +172,7 @@ fun SignUpScreen(
                         val message = when (registrationError) {
                             RegistrationError.REQUIRED_FIELDS -> stringResource(id = R.string.registration_error_required)
                             RegistrationError.USERNAME_TAKEN -> stringResource(id = R.string.registration_error_username_taken)
+                            RegistrationError.GOOGLE_SIGN_UP_FAILED -> stringResource(id = R.string.google_signup_failed)
                         }
                         Text(
                             text = message,
@@ -156,6 +190,19 @@ fun SignUpScreen(
                         } else {
                             Text(text = stringResource(id = R.string.registration_cta))
                         }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            val googleSignInClient = GoogleAuth.getGoogleSignInClient(context)
+                            googleSignInLauncher.launch(googleSignInClient.signInIntent)
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Black)
+                    ) {
+                        Icon(painter = painterResource(id = R.drawable.google_icon), contentDescription = "Google Sign In", modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = stringResource(id = R.string.sign_in_with_google))
                     }
                 }
             }

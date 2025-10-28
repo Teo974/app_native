@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Buenos Aires Connect</string>
+    <string name="default_web_client_id">REPLACE_WITH_YOUR_WEB_CLIENT_ID</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -89,6 +90,8 @@
     <!-- Auth Screen Strings -->
     <string name="login_button">Log In</string>
     <string name="signup_button">Sign Up</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="google_signup_failed">Google Sign-Up Failed</string>
 
     <!-- FAB Content Description -->
     <string name="add_event_fab_content_description">Add Event</string>

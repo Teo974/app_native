@@ -3,17 +3,21 @@ package com.buenosaires.connect.features.onboarding.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.buenosaires.connect.features.onboarding.data.UserRepository
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
@@ -44,16 +48,31 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun signInWithGoogle(credential: AuthCredential) {
+        _isLoading.value = true
+        _error.value = null
+        viewModelScope.launch {
+            try {
+                firebaseAuth.signInWithCredential(credential).await()
+                _loginCompleted.value = true
+            } catch (e: Exception) {
+                _error.value = "Google Sign-In failed"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
     fun acknowledgeCompletion() {
         _loginCompleted.value = false
     }
 
     fun logoutUser() {
         userRepository.logout()
-        // Reset login state to allow re-login
+        firebaseAuth.signOut()
         _loginCompleted.value = false
         _error.value = null
-        _logoutConfirmed.value = true // Signal that logout is confirmed
+        _logoutConfirmed.value = true
     }
 
     fun acknowledgeLogoutConfirmation() {
