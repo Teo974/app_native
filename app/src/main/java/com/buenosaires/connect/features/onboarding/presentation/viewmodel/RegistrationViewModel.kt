@@ -2,53 +2,49 @@ package com.buenosaires.connect.features.onboarding.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.buenosaires.connect.core.data.UserDao
-import com.buenosaires.connect.core.model.User
+import com.buenosaires.connect.features.onboarding.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
+import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val userDao: UserDao
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
-    private val _error = MutableStateFlow<RegistrationError?>(null)
-    val error: StateFlow<RegistrationError?> = _error
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     private val _registrationCompleted = MutableStateFlow(false)
-    val registrationCompleted: StateFlow<Boolean> = _registrationCompleted
+    val registrationCompleted: StateFlow<Boolean> = _registrationCompleted.asStateFlow()
+
+    private val _error = MutableStateFlow<RegistrationError?>(null)
+    val error: StateFlow<RegistrationError?> = _error.asStateFlow()
 
     fun registerUser(username: String, email: String, password: String) {
+        _isLoading.value = true
+        _error.value = null
+
         viewModelScope.launch {
-            _error.value = null
+            delay(1500) // Simulate network delay
+
             if (username.isBlank() || email.isBlank() || password.isBlank()) {
                 _error.value = RegistrationError.REQUIRED_FIELDS
-                return@launch
-            }
-
-            _isLoading.value = true
-            val existing = userDao.getUserByUsername(username)
-            if (existing != null) {
-                _error.value = RegistrationError.USERNAME_TAKEN
                 _isLoading.value = false
                 return@launch
             }
 
-            val user = User(
-                username = username.trim(),
-                email = email.trim(),
-                passwordHash = password.sha256()
-            )
-            userDao.insert(user)
+            val success = userRepository.addUser(username, password)
+            if (success) {
+                _registrationCompleted.value = true
+            } else {
+                _error.value = RegistrationError.USERNAME_TAKEN
+            }
             _isLoading.value = false
-            _registrationCompleted.value = true
         }
     }
 
@@ -59,10 +55,5 @@ class RegistrationViewModel @Inject constructor(
     enum class RegistrationError {
         REQUIRED_FIELDS,
         USERNAME_TAKEN
-    }
-
-    private fun String.sha256(): String {
-        val bytes = MessageDigest.getInstance("SHA-256").digest(trim().toByteArray())
-        return bytes.joinToString(separator = "") { byte -> "%02x".format(byte) }
     }
 }

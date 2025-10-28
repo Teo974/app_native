@@ -1,14 +1,16 @@
 package com.buenosaires.connect.features.profile.presentation.viewmodel
 
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.buenosaires.connect.core.data.UserRepository
+import androidx.navigation.NavController
+import com.buenosaires.connect.features.onboarding.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,64 +19,40 @@ class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _username = MutableStateFlow("")
-    val username: StateFlow<String> = _username
+    val username: StateFlow<String?> = userRepository.loggedInUser
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
-    private val _description = MutableStateFlow("")
-    val description: StateFlow<String> = _description
+    private val _description = MutableStateFlow("Viajero y entusiasta de la cultura porteña.")
+    val description: StateFlow<String> = _description.asStateFlow()
 
     private val _profilePictureUri = MutableStateFlow<Uri?>(null)
-    val profilePictureUri: StateFlow<Uri?> = _profilePictureUri
+    val profilePictureUri: StateFlow<Uri?> = _profilePictureUri.asStateFlow()
 
     private val _isSaveEnabled = MutableStateFlow(false)
-    val isSaveEnabled: StateFlow<Boolean> = _isSaveEnabled
+    val isSaveEnabled: StateFlow<Boolean> = _isSaveEnabled.asStateFlow()
 
-    private var initialDescription: String? = ""
-    private var initialProfilePictureUri: Uri? = null
-
-
-    init {
-        viewModelScope.launch {
-            userRepository.getLoggedInUser()?.let { user ->
-                _username.value = user.username
-                _description.value = user.description ?: ""
-                initialDescription = user.description
-                user.profilePictureUri?.let {
-                    _profilePictureUri.value = it.toUri()
-                    initialProfilePictureUri = it.toUri()
-                }
-            }
-
-            // Combine the flows to check for changes
-            combine(_description, _profilePictureUri) { currentDescription, currentUri ->
-                currentDescription != initialDescription || currentUri != initialProfilePictureUri
-            }.collect {
-                _isSaveEnabled.value = it
-            }
-        }
-    }
+    private val originalDescription = _description.value
+    private var originalProfilePictureUri = _profilePictureUri.value
 
     fun onDescriptionChange(newDescription: String) {
         _description.value = newDescription
+        _isSaveEnabled.value = newDescription != originalDescription
     }
 
     fun onProfilePictureChange(newUri: Uri) {
         _profilePictureUri.value = newUri
+        _isSaveEnabled.value = newUri != originalProfilePictureUri
     }
 
     fun onSaveClick() {
+        _isSaveEnabled.value = false
+    }
+
+    fun onLogoutClick(navController: NavController) {
         viewModelScope.launch {
-            val currentUser = userRepository.getLoggedInUser()
-            currentUser?.let {
-                val updatedUser = it.copy(
-                    description = _description.value,
-                    profilePictureUri = _profilePictureUri.value?.toString()
-                )
-                userRepository.insertUser(updatedUser)
-                // After saving, update the initial state to the new state
-                initialDescription = updatedUser.description
-                initialProfilePictureUri = updatedUser.profilePictureUri?.toUri()
-                _isSaveEnabled.value = false
+            userRepository.logout()
+            navController.navigate("auth") {
+                popUpTo(navController.graph.startDestinationId) { inclusive = true }
             }
         }
     }

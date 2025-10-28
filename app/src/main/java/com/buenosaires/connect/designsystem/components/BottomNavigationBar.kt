@@ -3,7 +3,7 @@
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.ConfirmationNumber // Changed from Event to ConfirmationNumber
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -26,9 +26,9 @@ private data class BottomNavDestination(
 
 private val destinations = listOf(
     BottomNavDestination("home", R.string.nav_home, Icons.Filled.Home),
-    BottomNavDestination("chat", R.string.nav_chat, Icons.AutoMirrored.Filled.Chat),
-    BottomNavDestination("map", R.string.nav_map, Icons.Filled.Map),
-    BottomNavDestination("profile", R.string.nav_profile, Icons.Filled.AccountCircle) // Added Profile
+    BottomNavDestination("events", R.string.nav_events, Icons.Filled.ConfirmationNumber), // Moved Events up
+    BottomNavDestination("chat", R.string.nav_chat, Icons.AutoMirrored.Filled.Chat), // Moved Chat down
+    BottomNavDestination("profile", R.string.nav_profile, Icons.Filled.AccountCircle)
 )
 
 @Composable
@@ -40,12 +40,12 @@ fun BuenosAiresBottomBar(navController: NavController) {
         destinations.forEach { destination ->
             val selected = when (destination.route) {
                 "home" -> currentRoute.startsWith("home") ||
-                    currentRoute.startsWith("moment_detail") ||
+                    currentRoute.startsWith("event_detail") ||
                     currentRoute.startsWith("add_moment") ||
                     currentRoute.startsWith("edit_moment")
+                "events" -> currentRoute.startsWith("events") // Updated selection logic for events
                 "chat" -> currentRoute.startsWith("chat")
-                "map" -> currentRoute.startsWith("map")
-                "profile" -> currentRoute.startsWith("profile") // Added Profile selection logic
+                "profile" -> currentRoute.startsWith("profile")
                 else -> currentRoute == destination.route
             }
             NavigationBarItem(

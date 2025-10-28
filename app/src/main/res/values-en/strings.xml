@@ -65,4 +65,5 @@
     <string name="map_marker_center">Microcentro</string>
     <string name="moment_not_found">Moment not found</string>
     <string name="logout">Logout</string>
+    <string name="add_moment_title">Add Moment</string>
 </resources>

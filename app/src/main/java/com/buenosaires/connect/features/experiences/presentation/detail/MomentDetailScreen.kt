@@ -1,5 +1,8 @@
 package com.buenosaires.connect.features.experiences.presentation.detail
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +38,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,7 +66,7 @@ fun MomentDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = currentMoment?.description ?: stringResource(id = R.string.edit_moment_title)) },
+                title = { Text(text = currentMoment?.description ?: stringResource(id = R.string.edit_moment_title), color = Color.Black) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -71,12 +78,13 @@ fun MomentDetailScreen(
                 actions = {
                     if ((currentMoment?.id ?: 0L) > 0) {
                         IconButton(onClick = {
-                            navController.navigate("edit_moment/${currentMoment?.id}")
+                            navController.navigate("edit_moment/${'$'}{currentMoment?.id}")
                         }) {
                             Icon(imageVector = Icons.Filled.Edit, contentDescription = null)
                         }
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         }
     ) { padding ->
@@ -84,6 +92,7 @@ fun MomentDetailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color.White)
                     .padding(padding)
                     .padding(24.dp),
                 verticalArrangement = Arrangement.Center
@@ -97,14 +106,23 @@ fun MomentDetailScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color.White)
                     .padding(padding)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 item {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(),
+                                onClick = {}
+                            ),
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             AsyncImage(
@@ -173,10 +191,18 @@ private fun CommentRow(
     isOwnComment: Boolean,
     onDelete: () -> Unit
 ) {
-    val formatter = remember { SimpleDateFormat("dd MMM HH:mm", Locale.getDefault()) }
+    val formattedTimestamp = SimpleDateFormat("dd MMM HH:mm", Locale.getDefault()).format(Date(comment.timestamp))
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(),
+                onClick = {}
+            ),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(
@@ -185,7 +211,7 @@ private fun CommentRow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${comment.author} - ${formatter.format(Date(comment.timestamp))}",
+                    text = "${comment.author} - $formattedTimestamp",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Medium
                 )

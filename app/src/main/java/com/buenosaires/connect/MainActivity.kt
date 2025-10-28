@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,18 +28,26 @@ import com.buenosaires.connect.features.experiences.presentation.AddMomentScreen
 import com.buenosaires.connect.features.experiences.presentation.EditMomentScreen
 import com.buenosaires.connect.features.experiences.presentation.HomeScreen
 import com.buenosaires.connect.features.experiences.presentation.detail.MomentDetailScreen
-import com.buenosaires.connect.features.map.presentation.MapScreen
-import com.buenosaires.connect.features.onboarding.presentation.RegistrationScreen
+import com.buenosaires.connect.features.onboarding.presentation.AuthScreen
+import com.buenosaires.connect.features.onboarding.presentation.LoginScreen
+import com.buenosaires.connect.features.onboarding.presentation.SignUpScreen
 import com.buenosaires.connect.features.root.presentation.viewmodel.MainViewModel
 import com.buenosaires.connect.features.settings.presentation.SettingsScreen
-import com.buenosaires.connect.features.profile.presentation.ProfileScreen // Added ProfileScreen import
+import com.buenosaires.connect.features.profile.presentation.ProfileScreen
+import com.buenosaires.connect.features.events.presentation.EventsScreen
+import com.buenosaires.connect.features.events.presentation.EventDetailScreen
+import com.buenosaires.connect.features.events.presentation.AddEventScreen
+import com.buenosaires.connect.features.settings.presentation.viewmodel.LanguageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val languageViewModel: LanguageViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        languageViewModel.loadLanguage(this)
         enableEdgeToEdge()
         setContent {
             BuenosAiresConnectTheme {
@@ -55,12 +64,26 @@ fun AppNavigation() {
     val startDestination by mainViewModel.startDestination.collectAsState()
 
     if (startDestination != null) {
-        NavHost(navController = navController, startDestination = startDestination!!) {
-            composable("registration") {
-                RegistrationScreen(
-                    onContinueToHome = {
+        NavHost(navController = navController, startDestination = "auth") { // Start at AuthScreen
+            composable("auth") {
+                AuthScreen(navController = navController)
+            }
+            composable("login") {
+                LoginScreen(
+                    navController = navController,
+                    onLoginSuccess = {
                         navController.navigate("home") {
-                            popUpTo("registration") { inclusive = true }
+                            popUpTo("auth") { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable("registration") { // This is now SignUpScreen
+                SignUpScreen(
+                    navController = navController, // Pass navController
+                    onSignUpSuccess = {
+                        navController.navigate("home") {
+                            popUpTo("auth") { inclusive = true }
                         }
                     }
                 )
@@ -81,8 +104,18 @@ fun AppNavigation() {
                 val contact = entry.arguments?.getString("contact") ?: return@composable
                 ChatConversationScreen(navController = navController, contact = contact, viewModel = chatViewModel)
             }
-            composable("map") {
-                MapScreen(navController = navController)
+            composable("events") {
+                EventsScreen(navController = navController)
+            }
+            composable(
+                "event_detail/{eventId}",
+                arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val eventId = backStackEntry.arguments?.getString("eventId") ?: return@composable
+                EventDetailScreen(navController = navController, eventId = eventId)
+            }
+            composable("add_event") {
+                AddEventScreen(navController = navController)
             }
             composable(
                 "moment_detail/{momentId}",
@@ -102,7 +135,7 @@ fun AppNavigation() {
             composable("settings") {
                 SettingsScreen(navController = navController)
             }
-            composable("profile") { // Added ProfileScreen composable
+            composable("profile") {
                 ProfileScreen(navController = navController)
             }
         }

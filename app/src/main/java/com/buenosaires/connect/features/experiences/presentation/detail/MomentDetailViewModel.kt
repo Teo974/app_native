@@ -76,4 +76,3 @@ class MomentDetailViewModel @Inject constructor(
 
     fun isOwnComment(comment: Comment): Boolean = comment.author == currentAuthor
 }
-

@@ -1,5 +1,6 @@
 ﻿package com.buenosaires.connect.features.chat.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -22,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,18 +64,20 @@ fun ChatConversationScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = contact) },
+                title = { Text(text = contact, color = Color.Black) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(id = R.string.back))
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(id = R.string.back), tint = Color.Black)
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(padding)
                 .padding(16.dp)
         ) {
@@ -116,12 +122,17 @@ fun ChatConversationScreen(
 private fun MessageBubble(message: ChatMessage) {
     val alignment = if (message.fromMe) Alignment.End else Alignment.Start
     val containerColor = if (message.fromMe) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.85f)
+        MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)
+        MaterialTheme.colorScheme.surface
     }
+    val shape = RoundedCornerShape(8.dp)
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = alignment) {
-        Card(colors = CardDefaults.cardColors(containerColor = containerColor)) {
+        Card(
+            shape = shape,
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = containerColor)
+        ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)

@@ -1,110 +1,133 @@
 ﻿package com.buenosaires.connect.features.settings.presentation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.buenosaires.connect.R
-import com.buenosaires.connect.designsystem.CityBackdrops
-import com.buenosaires.connect.designsystem.components.CityBackgroundScaffold
-import com.buenosaires.connect.features.settings.presentation.viewmodel.SettingsViewModel
+import com.buenosaires.connect.features.settings.presentation.viewmodel.LanguageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: LanguageViewModel = hiltViewModel()
 ) {
-    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
-    var expanded by remember { mutableStateOf(false) }
-    val languages = listOf(
-        "fr" to stringResource(id = R.string.language_french),
-        "en" to stringResource(id = R.string.language_english),
-        "es" to stringResource(id = R.string.language_spanish)
-    )
-    val selectedLabel = languages.firstOrNull { it.first == selectedLanguage }?.second ?: languages.first().second
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    CityBackgroundScaffold(
-        imageUrl = CityBackdrops.SETTINGS,
+    if (showLanguageDialog) {
+        LanguageDialog(
+            onDismiss = { showLanguageDialog = false },
+            onSelectLanguage = { language ->
+                viewModel.updateLanguage(context, language)
+                showLanguageDialog = false
+            }
+        )
+    }
+
+    Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(id = R.string.settings_title)) })
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(stringResource(id = R.string.settings_title), color = Color.Black)
+                        Text(stringResource(id = R.string.settings_headline), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+            )
         }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(padding)
                 .padding(24.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = stringResource(id = R.string.settings_headline),
-                style = MaterialTheme.typography.headlineSmall
+                text = stringResource(id = R.string.language),
+                style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(),
+                        onClick = { showLanguageDialog = true }
+                    )
+                    .padding(vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth(),
-                    value = selectedLabel,
-                    onValueChange = {},
-                    label = { Text(stringResource(id = R.string.language)) },
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    languages.forEach { (code, label) ->
-                        DropdownMenuItem(
-                            text = { Text(label) },
-                            onClick = {
-                                viewModel.updateLanguage(code)
-                                expanded = false
-                            }
-                        )
-                    }
-                }
+                Text(stringResource(id = R.string.select_language))
             }
             Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = { navController.popBackStack() }) {
                 Text(stringResource(id = R.string.back))
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { viewModel.logout(navController) }) { // Added Logout Button
-                Text(stringResource(id = R.string.logout))
-            }
         }
     }
+}
+
+@Composable
+private fun LanguageDialog(
+    onDismiss: () -> Unit,
+    onSelectLanguage: (String) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(id = R.string.select_language)) },
+        text = {
+            Column {
+                TextButton(onClick = { onSelectLanguage("en") }) {
+                    Text(stringResource(id = R.string.language_english))
+                }
+                TextButton(onClick = { onSelectLanguage("es") }) {
+                    Text(stringResource(id = R.string.language_spanish))
+                }
+                TextButton(onClick = { onSelectLanguage("fr") }) {
+                    Text(stringResource(id = R.string.language_french))
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel") // TODO: String resource
+            }
+        }
+    )
 }

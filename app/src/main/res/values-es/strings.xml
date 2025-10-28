@@ -14,7 +14,7 @@
     <string name="delete_moment">Eliminar momento</string>
     <string name="search_by_tag">Buscar por etiqueta</string>
     <string name="download_complete">Descarga completada</string>
-    <string name="download_complete_text">%1$s se descargó correctamente.</string>
+    <string name="download_complete_text">"%1$s se descargó correctamente."</string>
     <string name="add_moment_fab">Agregar un momento</string>
     <string name="settings">Configuración</string>
     <string name="language">Idioma</string>
@@ -43,7 +43,7 @@
     <string name="download_channel">Descargas</string>
     <string name="nav_home">Inicio</string>
     <string name="nav_chat">Chat</string>
-    <string name="nav_map">Mapa</string>
+    <string name="nav_events">Eventos</string>
     <string name="nav_profile">Perfil</string>
     <string name="chat_title">Chat comunitario</string>
     <string name="comment_section_title">Comentarios</string>
@@ -54,14 +54,48 @@
     <string name="chat_send">Enviar</string>
     <string name="chat_unread_single">1 mensaje nuevo</string>
     <string name="chat_unread_plural">%1$d mensajes nuevos</string>
-    <string name="map_title">Mapa de Buenos Aires</string>
-    <string name="map_description">Explora los barrios imperdibles de la ciudad.</string>
-    <string name="map_highlight_loboca_title">La Boca</string>
-    <string name="map_highlight_loboca_description">Colores, tango y arte popular a lo largo del Caminito.</string>
-    <string name="map_highlight_palermo_title">Palermo</string>
-    <string name="map_highlight_palermo_description">Parques, cafés de autor y vida nocturna entre Palermo Soho y Hollywood.</string>
-    <string name="map_highlight_recoleta_title">Recoleta</string>
-    <string name="map_highlight_recoleta_description">Arquitectura europea, museos y feria artesanal de fin de semana.</string>
-    <string name="map_marker_center">Microcentro</string>
     <string name="moment_not_found">No encontramos este momento</string>
+    <string name="logout">Cerrar sesión</string>
+
+    <!-- Event Screen Strings -->
+    <string name="event_search_hint">Buscar eventos</string>
+    <string name="event_category_label">Categoría</string>
+    <string name="event_category_all">Todas</string>
+    <string name="event_status_label">Estado</string>
+    <string name="event_status_all">Todos</string>
+    <string name="event_no_events">No hay eventos para mostrar.</string>
+    <string name="event_status_prefix">Estado: %1$s</string>
+
+    <!-- Event Detail Screen Strings -->
+    <string name="event_detail_back">Atrás</string>
+    <string name="event_detail_not_found">Evento no encontrado</string>
+    <string name="event_location_title">Ubicación del evento:</string>
+    <string name="event_subscribe_button">Suscribirse al evento</string>
+
+    <!-- Add Event Screen Strings -->
+    <string name="add_event_title">Crear Evento</string>
+    <string name="add_event_success">Evento creado con éxito</string>
+    <string name="add_event_error">Error al crear evento</string>
+    <string name="add_event_title_label">Título</string>
+    <string name="add_event_description_label">Descripción</string>
+    <string name="add_event_image_label">URL de Imagen</string>
+    <string name="add_event_category_label">Categoría</string>
+    <string name="add_event_status_label">Estado</string>
+    <string name="add_event_latitude_label">Latitud</string>
+    <string name="add_event_longitude_label">Longitud</string>
+    <string name="add_event_address_label">Dirección</string>
+    <string name="add_event_create_button">Crear Evento</string>
+
+    <!-- Auth Screen Strings -->
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="signup_button">Registrarse</string>
+
+    <!-- FAB Content Description -->
+    <string name="add_event_fab_content_description">Agregar evento</string>
+
+    <!-- Taglines -->
+    <string name="profile_tagline">Administra tu perfil</string>
+    <string name="events_tagline">Encuentra eventos en la ciudad</string>
+    <string name="chat_tagline">Tus conversaciones recientes</string>
+
 </resources>

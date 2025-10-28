@@ -1,68 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Buenos Aires Connect</string>
-    <string name="username">Nombre de usuario</string>
-    <string name="email">Correo electrónico</string>
-    <string name="password">Contraseña</string>
-    <string name="register">Registrarse</string>
-    <string name="description">Descripción</string>
-    <string name="location">Ubicación</string>
-    <string name="select_image">Selecciona una imagen</string>
-    <string name="add_moment">Agregar un momento</string>
-    <string name="edit_moment">Editar momento</string>
-    <string name="save_changes">Guardar</string>
-    <string name="delete_moment">Eliminar momento</string>
-    <string name="search_by_tag">Buscar por etiqueta</string>
-    <string name="download_complete">Descarga completada</string>
-    <string name="download_complete_text">%1$s se descargó correctamente.</string>
-    <string name="add_moment_fab">Agregar un momento</string>
-    <string name="settings">Configuración</string>
-    <string name="language">Idioma</string>
-    <string name="select_language">Seleccionar idioma</string>
-    <string name="registration">Registro</string>
-    <string name="home_tagline">Comparte tus momentos en la capital argentina</string>
-    <string name="home_headline">Descubre y comparte las mejores experiencias porteñas</string>
-    <string name="registration_title">Únete a la comunidad de expatriados en Buenos Aires</string>
-    <string name="registration_cta">Unirme ahora</string>
-    <string name="registration_error_required">Todos los campos son obligatorios.</string>
-    <string name="registration_error_username_taken">Ese nombre de usuario ya está registrado.</string>
-    <string name="create_moment_title">Crear un momento en Buenos Aires</string>
-    <string name="create_moment_headline">Captura lo que hace única a la ciudad</string>
-    <string name="create_moment_placeholder">Describe tu momento (máximo 280 caracteres)</string>
-    <string name="publish_moment">Publicar momento</string>
-    <string name="location_with_value">Ubicación: %1$s</string>
-    <string name="edit_moment_title">Actualizar tu momento</string>
-    <string name="edit_moment_headline">Perfecciona tus recuerdos porteños</string>
-    <string name="edit_moment_update_image">Cambiar imagen</string>
-    <string name="settings_title">Preferencias</string>
-    <string name="settings_headline">Personaliza tu experiencia</string>
-    <string name="back">Volver</string>
-    <string name="language_french">Francés</string>
-    <string name="language_english">Inglés</string>
-    <string name="language_spanish">Español</string>
-    <string name="download_channel">Descargas</string>
-    <string name="nav_home">Inicio</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="description">Description</string>
+    <string name="location">Location</string>
+    <string name="select_image">Select an image</string>
+    <string name="add_moment">Add a moment</string>
+    <string name="edit_moment">Edit moment</string>
+    <string name="save_changes">Save</string>
+    <string name="delete_moment">Delete moment</string>
+    <string name="search_by_tag">Search by tag</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_complete_text">"%1$s has been downloaded successfully."</string>
+    <string name="add_moment_fab">Add a moment</string>
+    <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="select_language">Select language</string>
+    <string name="registration">Registration</string>
+    <string name="home_tagline">Share your moments in the Argentine capital</string>
+    <string name="home_headline">Discover and share the best porteño experiences</string>
+    <string name="registration_title">Join the community of expats in Buenos Aires</string>
+    <string name="registration_cta">Join now</string>
+    <string name="registration_error_required">All fields are required.</string>
+    <string name="registration_error_username_taken">That username is already taken.</string>
+    <string name="create_moment_title">Create a moment in Buenos Aires</string>
+    <string name="create_moment_headline">Capture what makes the city unique</string>
+    <string name="create_moment_placeholder">Describe your moment (280 characters max)</string>
+    <string name="publish_moment">Publish moment</string>
+    <string name="location_with_value">Location: %1$s</string>
+    <string name="edit_moment_title">Update your moment</string>
+    <string name="edit_moment_headline">Perfect your porteño memories</string>
+    <string name="edit_moment_update_image">Change image</string>
+    <string name="settings_title">Preferences</string>
+    <string name="settings_headline">Customize your experience</string>
+    <string name="back">Back</string>
+    <string name="language_french">French</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="download_channel">Downloads</string>
+    <string name="nav_home">Home</string>
     <string name="nav_chat">Chat</string>
-    <string name="nav_map">Mapa</string>
-    <string name="nav_profile">Perfil</string>
-    <string name="chat_title">Chat comunitario</string>
-    <string name="comment_section_title">Comentarios</string>
-    <string name="add_comment_placeholder">Tu comentario</string>
-    <string name="comment_send">Enviar</string>
-    <string name="comment_delete">Eliminar comentario</string>
-    <string name="chat_input_placeholder">Escribe un mensaje</string>
-    <string name="chat_send">Enviar</string>
-    <string name="chat_unread_single">1 mensaje nuevo</string>
-    <string name="chat_unread_plural">%1$d mensajes nuevos</string>
-    <string name="map_title">Mapa de Buenos Aires</string>
-    <string name="map_description">Explora los barrios imperdibles de la ciudad.</string>
-    <string name="map_highlight_loboca_title">La Boca</string>
-    <string name="map_highlight_loboca_description">Colores, tango y arte popular a lo largo del Caminito.</string>
-    <string name="map_highlight_palermo_title">Palermo</string>
-    <string name="map_highlight_palermo_description">Parques, cafés de autor y vida nocturna entre Palermo Soho y Hollywood.</string>
-    <string name="map_highlight_recoleta_title">Recoleta</string>
-    <string name="map_highlight_recoleta_description">Arquitectura europea, museos y feria artesanal de fin de semana.</string>
-    <string name="map_marker_center">Microcentro</string>
-    <string name="moment_not_found">No encontramos este momento</string>
-    <string name="logout">Cerrar sesión</string>
+    <string name="nav_events">Events</string>
+    <string name="nav_profile">Profile</string>
+    <string name="chat_title">Community Chat</string>
+    <string name="comment_section_title">Comments</string>
+    <string name="add_comment_placeholder">Your comment</string>
+    <string name="comment_send">Send</string>
+    <string name="comment_delete">Delete comment</string>
+    <string name="chat_input_placeholder">Write a message</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_unread_single">1 new message</string>
+    <string name="chat_unread_plural">%1$d new messages</string>
+    <string name="moment_not_found">We couldn\'t find this moment</string>
+    <string name="logout">Log out</string>
+
+    <!-- Event Screen Strings -->
+    <string name="event_search_hint">Search events</string>
+    <string name="event_category_label">Category</string>
+    <string name="event_category_all">All</string>
+    <string name="event_status_label">Status</string>
+    <string name="event_status_all">All</string>
+    <string name="event_no_events">No events to show.</string>
+    <string name="event_status_prefix">Status: %1$s</string>
+
+    <!-- Event Detail Screen Strings -->
+    <string name="event_detail_back">Back</string>
+    <string name="event_detail_not_found">Event not found</string>
+    <string name="event_location_title">Event location:</string>
+    <string name="event_subscribe_button">Subscribe to event</string>
+
+    <!-- Add Event Screen Strings -->
+    <string name="add_event_title">Create Event</string>
+    <string name="add_event_success">Event created successfully</string>
+    <string name="add_event_error">Error creating event</string>
+    <string name="add_event_title_label">Title</string>
+    <string name="add_event_description_label">Description</string>
+    <string name="add_event_image_label">Image URL</string>
+    <string name="add_event_category_label">Category</string>
+    <string name="add_event_status_label">Status</string>
+    <string name="add_event_latitude_label">Latitude</string>
+    <string name="add_event_longitude_label">Longitude</string>
+    <string name="add_event_address_label">Address</string>
+    <string name="add_event_create_button">Create Event</string>
+
+    <!-- Auth Screen Strings -->
+    <string name="login_button">Log In</string>
+    <string name="signup_button">Sign Up</string>
+
+    <!-- FAB Content Description -->
+    <string name="add_event_fab_content_description">Add Event</string>
+
+    <!-- Taglines -->
+    <string name="profile_tagline">Manage your profile</string>
+    <string name="events_tagline">Find events happening in the city</string>
+    <string name="chat_tagline">Your recent conversations</string>
+    <string name="add_moment_title">Add Moment</string>
+
 </resources>
